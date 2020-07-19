@@ -20,96 +20,55 @@ namespace Booking3
         public MainForm()
         {
             InitializeComponent();
-            Filter(null, null);   
-            
-            List<string> cities = SQLClass.Select("SELECT DISTINCT Name FROM cities ORDER BY Name");
-            CityComboBox.Items.Clear();
-            CityComboBox.Items.Add("");
+        }
+        
+        
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            HotelList hotelList = new HotelList();
+            hotelList.Dock = DockStyle.Fill;
+            panel1.Controls.Clear();
+            panel1.Controls.Add(hotelList);
+
+
+            List<string> cities = SQLClass.Select("SELECT DISTINCT name FROM cities ORDER BY name");
             foreach (string city in cities)
-                CityComboBox.Items.Add(city);
-        }
-
-        private void FilterButton_Click(object sender, EventArgs e)
-        {
-            if (FilterPanel.Size.Height < 50)
-                FilterPanel.Size = new Size(FilterPanel.Size.Width, 120);
-            else
-                FilterPanel.Size = new Size(FilterPanel.Size.Width, FilterButton.Size.Height);
-        }
-
-        /// <summary>
-        /// Открытие гостиницы
-        /// </summary>
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            PictureBox pb = (PictureBox)sender;            
-            HotelForm hf = new HotelForm(pb.Tag.ToString());
-            hf.ShowDialog();
-            Filter(sender, e);
-        }
-
-        /// <summary>
-        /// Открытие гостиницы
-        /// </summary>
-        private void label4_Click(object sender, EventArgs e)
-        {
-            Label pb = (Label)sender;
-            HotelForm hf = new HotelForm(pb.Tag.ToString());
-            hf.ShowDialog();
-            Filter(sender, e);
-        }
-
-        /// <summary>
-        /// ФИльтр
-        /// </summary>
-        private void Filter(object sender, EventArgs e)
-        {
-            HotelsPanel.Controls.Clear();
-            string command = "SELECT id, Name, City, Image, Rating FROM  " + SQLClass.HOTELS + "  WHERE 1";
-            if (CityComboBox.Text != "")
-                command += " AND city = '" + CityComboBox.Text + "'";
-            if (RatingComboBox.Text != "")
-                command += " AND Rating >= " + RatingComboBox.Text;
-
-            List<string> hotels = SQLClass.Select(command);
-
-            int x = 15;
-            for (int i = 0; i < hotels.Count; i += 5)
             {
-                PictureBox pb = new PictureBox();
-                try
+                TreeNode node = new TreeNode(city);
+                treeView1.Nodes[0].Nodes.Add(node);
+
+
+                List<string> hotels = SQLClass.Select(
+                    "SELECT DISTINCT name, id FROM hotels" +
+                    " WHERE city='" + node.Text + "' ORDER BY name");
+                for (int i = 0; i < hotels.Count; i += 2)
                 {
-                    pb.Load("../../Pictures/" + hotels[i + 3]);
+                    TreeNode node2 = new TreeNode(hotels[i]);
+                    node2.Tag = hotels[i + 1];
+                    node.Nodes.Add(node2);
+
+                    List<string> rooms = SQLClass.Select(
+                        "SELECT DISTINCT name, id FROM room" +
+                        " WHERE hotel_id='" + node2.Tag.ToString() + "' ORDER BY name");
+                    for (int j = 0; j < rooms.Count; j += 2)
+                    {
+                        TreeNode node3 = new TreeNode(rooms[j]);
+                        node3.Tag = rooms[j + 1];
+                        node2.Nodes.Add(node3);
+                    }
                 }
-                catch (Exception) { }
-                pb.Location = new Point(x, 10);
-                pb.Size = new Size(190, 120);
-                pb.SizeMode = PictureBoxSizeMode.StretchImage;
-                pb.Tag = hotels[i];
-                pb.Click += new EventHandler(pictureBox1_Click);
-                HotelsPanel.Controls.Add(pb);
-
-                Label lbl = new Label();
-                lbl.Location = new Point(x, 140);
-                lbl.Size = new Size(200, 30);
-                lbl.Text = hotels[i + 1];
-                lbl.Tag = hotels[i];
-                lbl.Click += new EventHandler(label4_Click);
-                HotelsPanel.Controls.Add(lbl);
-
-                x += 205;
             }
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
 
-        }
 
         private void button2_Click(object sender, EventArgs e)
         {
             AdminForm af = new AdminForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
         }
 
         private void LoginClick(object sender, EventArgs e)
@@ -218,6 +177,130 @@ namespace Booking3
             af.ShowDialog();
 
             HelloLabel.Text = "Привет, " + Login;
+        }
+
+        /// <summary>
+        /// Скрытие админского узла
+        /// </summary>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (IsAdmin && treeView1.Nodes.Count == 1)
+            {
+                TreeNode node = new TreeNode("Админка");
+                treeView1.Nodes.Add(node);
+
+
+                TreeNode node2 = new TreeNode("Гостиницы");
+                node.Nodes.Add(node2);
+                TreeNode node3 = new TreeNode("Комнаты");
+                node.Nodes.Add(node3);
+                TreeNode node4 = new TreeNode("Пользователи");
+                node.Nodes.Add(node4);
+                TreeNode node5 = new TreeNode("Бронирования");
+                node.Nodes.Add(node5);
+                TreeNode node6 = new TreeNode("Ошибки");
+                node.Nodes.Add(node6);
+            }
+            else if (!IsAdmin && treeView1.Nodes.Count > 1)
+            {
+                treeView1.Nodes.RemoveAt(1);
+            }
+        }
+
+        /// <summary>
+        /// Выбор узла дерева
+        /// </summary>
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+            #region Выбран город
+            if (e.Node.Level == 0 && e.Node.Text == "Города" ||
+                e.Node.Level == 1 && e.Node.Parent.Text == "Города")
+            {
+                HotelList listUC = new HotelList();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            #endregion
+
+            #region Выбрана гостиница
+            else if (e.Node.Level == 2 && 
+                e.Node.Parent.Parent.Text == "Города")
+            {
+                HotelForm listUC = new HotelForm(e.Node.Tag.ToString());
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            #endregion
+
+            #region Выбрана комната
+            else if (e.Node.Level == 3 && 
+                e.Node.Parent.Parent.Parent.Text == "Города")
+            {
+                RoomForm listUC = new RoomForm(e.Node.Tag.ToString());
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            #endregion
+
+            #region Выбрана админка
+            else if (e.Node.Level == 0 && e.Node.Text == "Админка")
+            {
+                AdminForm listUC = new AdminForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            else if (e.Node.Level == 1 &&
+                e.Node.Parent.Text == "Админка" &&
+                e.Node.Text == "Гостиницы")
+            {
+                AdminHotelsForm listUC = new AdminHotelsForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            else if (e.Node.Level == 1 &&
+                e.Node.Parent.Text == "Админка" &&
+                e.Node.Text == "Комнаты")
+            {
+                AdminRoomsForm listUC = new AdminRoomsForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            else if (e.Node.Level == 1 &&
+                e.Node.Parent.Text == "Админка" &&
+                e.Node.Text == "Бронирования")
+            {
+                Admin.AdminBookingForm listUC = new Admin.AdminBookingForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            else if (e.Node.Level == 1 &&
+                e.Node.Parent.Text == "Админка" &&
+                e.Node.Text == "Ошибки")
+            {
+                Admin.AdminLogForm listUC = new Admin.AdminLogForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            else if (e.Node.Level == 1 &&
+                e.Node.Parent.Text == "Админка" &&
+                e.Node.Text == "Пользователи")
+            {
+                AdminUsersForm listUC = new AdminUsersForm();
+                listUC.Dock = DockStyle.Fill;
+                panel1.Controls.Clear();
+                panel1.Controls.Add(listUC);
+            }
+            #endregion
+
         }
     }
 }

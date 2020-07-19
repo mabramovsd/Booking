@@ -11,7 +11,7 @@ using MySql.Data.MySqlClient;
 
 namespace Booking3
 {
-    public partial class AdminHotelsForm : Form
+    public partial class AdminHotelsForm : UserControl
     {
         public AdminHotelsForm()
         {

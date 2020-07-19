@@ -57,46 +57,52 @@
       <DependentUpon>AccountForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminBookingForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminBookingForm.Designer.cs">
       <DependentUpon>AdminBookingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminForm.Designer.cs">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminHotelsForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminHotelsForm.Designer.cs">
       <DependentUpon>AdminHotelsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminLogForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminLogForm.Designer.cs">
       <DependentUpon>AdminLogForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminRoomsForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminRoomsForm.Designer.cs">
       <DependentUpon>AdminRoomsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Admin\AdminUsersForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Admin\AdminUsersForm.Designer.cs">
       <DependentUpon>AdminUsersForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HotelForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="HotelForm.Designer.cs">
       <DependentUpon>HotelForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HotelList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HotelList.Designer.cs">
+      <DependentUpon>HotelList.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -113,7 +119,7 @@
       <DependentUpon>RegisterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="RoomForm.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="RoomForm.Designer.cs">
       <DependentUpon>RoomForm.cs</DependentUpon>
@@ -121,6 +127,7 @@
     <Compile Include="SQLClass.cs" />
     <EmbeddedResource Include="AccountForm.resx">
       <DependentUpon>AccountForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\AdminBookingForm.resx">
       <DependentUpon>AdminBookingForm.cs</DependentUpon>
@@ -142,6 +149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HotelForm.resx">
       <DependentUpon>HotelForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HotelList.resx">
+      <DependentUpon>HotelList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Booking3
 {
-    public partial class AdminForm : Form
+    public partial class AdminForm : UserControl
     {
         public AdminForm()
         {
@@ -20,31 +20,51 @@ namespace Booking3
         private void button1_Click(object sender, EventArgs e)
         {
             AdminHotelsForm af = new AdminHotelsForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             AdminRoomsForm af = new AdminRoomsForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             AdminUsersForm af = new AdminUsersForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Admin.AdminBookingForm af = new Admin.AdminBookingForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             Admin.AdminLogForm af = new Admin.AdminLogForm();
-            af.Show();
+
+            Controls.Clear();
+            Controls.Add(af);
+            af.Dock = DockStyle.Fill;
+        }
+
+        private void AdminForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

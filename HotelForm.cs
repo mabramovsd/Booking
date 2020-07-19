@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Booking3
 {
-    public partial class HotelForm : Form
+    public partial class HotelForm : UserControl
     {
         string HotelName;
         string id;
@@ -119,14 +119,20 @@ namespace Booking3
         {
             PictureBox pb = (PictureBox)sender;
             RoomForm rf = new RoomForm(pb.Tag.ToString());
-            rf.Show();
+
+            Controls.Clear();
+            Controls.Add(rf);
+            rf.Dock = DockStyle.Fill;
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
             Label pb = (Label)sender;
             RoomForm rf = new RoomForm(pb.Tag.ToString());
-            rf.Show();
+
+            Controls.Clear();
+            Controls.Add(rf);
+            rf.Dock = DockStyle.Fill;
         }
 
         private void OpinionPanel_Paint(object sender, PaintEventArgs e)

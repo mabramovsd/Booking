@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Booking3
 {
-    public partial class AdminRoomsForm : Form
+    public partial class AdminRoomsForm : UserControl
     {
         public AdminRoomsForm()
         {

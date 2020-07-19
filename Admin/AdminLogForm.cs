@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Booking3.Admin
 {
-    public partial class AdminLogForm : Form
+    public partial class AdminLogForm : UserControl
     {
         public AdminLogForm()
         {

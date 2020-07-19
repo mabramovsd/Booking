@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Booking3
 {
-    public partial class RoomForm : Form
+    public partial class RoomForm : UserControl
     {
         string id = "";
         int qty = 0;
